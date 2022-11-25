@@ -51,6 +51,9 @@ int main(){
             case 5:
                 printf("exiting file explorer\n");
                 return 0;
+            default:
+                printf("Did not enter an acceptable command\n");
+                break
         }
     }
     //should not get here

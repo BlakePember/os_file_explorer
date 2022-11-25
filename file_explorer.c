@@ -8,7 +8,7 @@ int main(){
     char go_to[] = "";
     DIR* dir;
     struct dirent* entity;
-    for(int i = 0; i< 23; i++){
+    for(int i = 'C'; i< 'Z'; i++){
         current[0] += i;
         dir = opendir(current);
         if (dir != NULL){

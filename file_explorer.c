@@ -51,29 +51,29 @@ int main(){
             case 3: 
                 printf("enter name of folder you want to remove\n");
                 scanf("%s", rm_file);
-                # use a for loop to check to see if the folder already exists
-                # if it doesnt then print an error message and break
-                # else delete the folder
+                /* use a for loop to check to see if the folder already exists
+                   if it doesnt then print an error message and break
+                   else delete the folder*/
                 break;
             case 4: 
                 printf("enter name of folder you want to create\n");
                 scanf("%s", new_file);
-                # use a for loop to check to see if the folder already exists
-                # if it does then print an error message and break
-                # else create the folder
+                /* use a for loop to check to see if the folder already exists
+                   if it does then print an error message and break
+                   else create the folder*/
                 break;
             case 5:
                 printf("enter name of folder you want to copy\n");
                 scanf("%s", initial_file);
-                # use a for loop to check to see if the folder already exists
-                # if it doesnt then print an error message and break
-                # else continue
+                /* use a for loop to check to see if the folder already exists
+                   if it doesnt then print an error message and break
+                 else continue*/
                 printf("enter name of folder you want to copy to\n");
                 scanf("%s", new_file);
-                # use a for loop to check to see if the folder already exists
-                # if it does then print an error message and break
-                # else create the folder
-                # then copy contents of file
+                /* use a for loop to check to see if the folder already exists
+                   if it does then print an error message and break
+                   else create the folder
+                   then copy contents of file*/
                 break;
             case 6:
                 printf("exiting file explorer\n");

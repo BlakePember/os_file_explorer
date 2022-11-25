@@ -4,21 +4,24 @@
 int main(){
     int input;
     int end = 0;
-    char current[] = "c\\:";
+    char current[] = "A:\\";
     char go_to[] = "";
     DIR* dir;
     struct dirent* entity;
-    //for(int i = 0; i< 25; i++){
-        //current[0] += i;
-        //printf("%s\n",current);
-        dir = opendir("c:\\");
-        entity = readdir(dir);
-        while(entity != NULL){
-            printf("%s\n",entity->d_name);
+    for(int i = 0; i< 25; i++){
+        current[0] += i;
+        dir = opendir(current);
+        if (dir != NULL){
+            printf("%s\n",current);
             entity = readdir(dir);
+            while(entity != NULL){
+                printf("%s\n",entity->d_name);
+                entity = readdir(dir);
+            }
+            
+        }
+        closedir(dir);
     }
-        
-        //}
     while(1){
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete \n4 to create a folder\n5 to exit\n\n");
         scanf("%d",&input);
@@ -36,7 +39,7 @@ int main(){
                 break;
             case 5:
                 printf("exiting file explorer\n");
-                closedir(dir);
+                
                 return 0;
         }
     }

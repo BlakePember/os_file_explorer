@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <dirent.h>
-
+#include <string.h>
 int main(){
     int input;
     int end = 0;
@@ -8,7 +8,7 @@ int main(){
     char go_to[] = "";
     DIR* dir;
     struct dirent* entity;
-    for(int i = 'C'; i< 'Z'; i++){
+    for(int i = 'A'; i< 'Z'; i++){
         current[0] = i;
         dir = opendir(current);
         if (dir != NULL){
@@ -23,6 +23,8 @@ int main(){
     }
     current[0] = 'C';
     while(1){
+        printf("Starting in the C drive\n");
+        dir = opendir("C:\\");
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete \n4 to create a folder\n5 to exit\n\n");
         scanf("%d",&input);
         switch(input){
@@ -31,15 +33,23 @@ int main(){
                 break;
             case 1:
                 printf("Displaying contents of folder\n");
-                end = 1;
+                entity = readdir(dir);
+                while(entity != NULL){
+                    printf("%s\n",entity->d_name);
+                    entity = readdir(dir);
+                }
                 break;
             case 2:
+                closedir(dir);
                 printf("enter name of folder\n");
-                scanf("%d", go_to);
+                scanf("%s", go_to);
+                strcat(current,go_to);
+                strcat(current,"\\");
+                printf("%s\n", current);
+                dir = opendir(current);
                 break;
             case 5:
                 printf("exiting file explorer\n");
-                
                 return 0;
         }
     }

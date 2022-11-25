@@ -4,11 +4,11 @@
 int main(){
     int input;
     int end = 0;
-    char current[] = "A:\\";
+    char current[] = "C:\\";
     char go_to[] = "";
     DIR* dir;
     struct dirent* entity;
-    for(int i = 0; i< 25; i++){
+    for(int i = 0; i< 23; i++){
         current[0] += i;
         dir = opendir(current);
         if (dir != NULL){

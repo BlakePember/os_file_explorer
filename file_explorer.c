@@ -9,7 +9,7 @@ int main(){
     DIR* dir;
     struct dirent* entity;
     for(int i = 'C'; i< 'Z'; i++){
-        current[0] += i;
+        current[0] = i;
         dir = opendir(current);
         if (dir != NULL){
             printf("%s\n",current);
@@ -18,10 +18,10 @@ int main(){
                 printf("%s\n",entity->d_name);
                 entity = readdir(dir);
             }
-            
         }
         closedir(dir);
     }
+    current[0] = 'C';
     while(1){
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete \n4 to create a folder\n5 to exit\n\n");
         scanf("%d",&input);

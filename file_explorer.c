@@ -5,7 +5,7 @@
 int main(){
     int input;
     int end = 0;
-    char current[] = "C:\\";
+    char current[BUF] = "C:\\";
     char go_to[BUF];
     DIR* dir;
     struct dirent* entity;
@@ -25,6 +25,7 @@ int main(){
     int rm_file;
     int new_file;
     int initial_file;
+    char prev[BUF];
     current[0] = 'C';
     printf("Starting in the C drive\n");
     dir = opendir("C:\\");
@@ -32,6 +33,7 @@ int main(){
         
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");
         scanf("%d",&input);
+        fflush (stdin);
         switch(input){
             case 0: 
                 printf("Current directory is %s\n", current);
@@ -47,21 +49,21 @@ int main(){
                 break;
             case 2:
                 printf("%s\n", current);
-                char prev[] = current;
+                strcpy(prev, current);
                 printf("enter name of folder\n");
-                scanf("%s", go_to);
+                fgets(go_to,BUF,stdin);
+                fflush(stdin);
                 strcat(current,go_to);
                 strcat(current,"\\");
                 printf("%s\n", current);
                 closedir(dir);
                 dir = opendir(current);
-                if(dir == NULL)
-                {
+                if(dir == NULL){
                     closedir(dir);
                     printf("invalid directory, reverting to previous directory\n");
-                    closedir(dir);
                     dir = opendir(prev);
-                }              
+                    strcpy(current,prev);
+                }
                 break;
 
             case 3: 

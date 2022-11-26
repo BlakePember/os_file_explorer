@@ -55,7 +55,9 @@ int main(){
                 printf("%s\n", current);
                 closedir(dir);
                 dir = opendir(current);
-                if(dir == NULL){
+                if(dir == NULL)
+                {
+                    closedir(dir);
                     printf("invalid directory, reverting to previous directory\n");
                     closedir(dir);
                     dir = opendir(prev);

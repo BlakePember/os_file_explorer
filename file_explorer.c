@@ -22,9 +22,9 @@ int main(){
         }
         closedir(dir);
     }
-    int rm_file;
-    int new_file;
-    int initial_file;
+    char rm_file[BUF];
+    char new_file[BUF];
+    char initial_file[BUF];
     char prev[BUF];
     current[0] = 'C';
     printf("Starting in the C drive\n");

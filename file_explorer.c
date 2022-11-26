@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h>
+#define BUF 20
 int main(){
     int input;
     int end = 0;
     char current[] = "C:\\";
-    char go_to[] = "";
+    char go_to[BUF];
     DIR* dir;
     struct dirent* entity;
     for(int i = 'A'; i< 'Z'; i++){
@@ -21,10 +22,14 @@ int main(){
         }
         closedir(dir);
     }
+    int rm_file;
+    int new_file;
+    int initial_file;
     current[0] = 'C';
+    printf("Starting in the C drive\n");
+    dir = opendir("C:\\");
     while(1){
-        printf("Starting in the C drive\n");
-        dir = opendir("C:\\");
+        
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");
         scanf("%d",&input);
         switch(input){
@@ -38,16 +43,24 @@ int main(){
                     printf("%s\n",entity->d_name);
                     entity = readdir(dir);
                 }
+                printf("\n");
                 break;
             case 2:
-                closedir(dir);
+                printf("%s\n", current);
+                char prev[] = current;
                 printf("enter name of folder\n");
                 scanf("%s", go_to);
                 strcat(current,go_to);
                 strcat(current,"\\");
                 printf("%s\n", current);
-                dir = opendir(current);
+                closedir(dir);
+                if(dir = opendir(current) == NULL){
+                    printf("invalid directory, reverting to previous directory\n");
+                    dir = opendir(prev);
+                }
+                
                 break;
+
             case 3: 
                 printf("enter name of folder you want to remove\n");
                 scanf("%s", rm_file);

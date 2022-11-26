@@ -54,11 +54,12 @@ int main(){
                 strcat(current,"\\");
                 printf("%s\n", current);
                 closedir(dir);
-                if(dir = opendir(current) == NULL){
+                dir = opendir(current);
+                if(dir == NULL){
                     printf("invalid directory, reverting to previous directory\n");
+                    closedir(dir);
                     dir = opendir(prev);
-                }
-                
+                }              
                 break;
 
             case 3: 

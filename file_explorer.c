@@ -233,13 +233,6 @@ int main(){
                 printf("Did not enter an acceptable command\n");
                 break;
         }
-            case 6:
-                printf("exiting file explorer\n");
-                return 0;
-            default:
-                printf("Did not enter an acceptable command\n");
-                break;
-        }
     }
     //should not get here
    return 0;

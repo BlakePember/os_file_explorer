@@ -35,10 +35,10 @@ int main(){
         scanf("%d",&input);
         fflush (stdin);
         switch(input){
-            case 0: 
+            case 0:  // prints current directory
                 printf("Current directory is %s\n", current);
                 break;
-            case 1:
+            case 1: // prints all files in current directory
                 printf("Displaying contents of folder\n");
                 entity = readdir(dir);
                 while(entity != NULL){
@@ -47,7 +47,7 @@ int main(){
                 }
                 printf("\n");
                 break;
-            case 2:
+            case 2: // changes the current directory
                 closedir(dir);
                 char path[100] = { 0 };
                 strcpy(prev, current);
@@ -70,21 +70,21 @@ int main(){
                 }
                 break;
 
-            case 3: 
+            case 3: //deletes file in current directory
                 printf("enter name of folder you want to remove\n");
                 scanf("%s", rm_file);
                 /* use a for loop to check to see if the folder already exists
                    if it doesnt then print an error message and break
                    else delete the folder*/
                 break;
-            case 4: 
+            case 4: //creates a file in current directory
                 printf("enter name of folder you want to create\n");
                 scanf("%s", new_file);
                 /* use a for loop to check to see if the folder already exists
                    if it does then print an error message and break
                    else create the folder*/
                 break;
-            case 5:
+            case 5: //copies a file in the currrent directory
                 printf("enter name of folder you want to copy\n");
                 scanf("%s", initial_file);
                 /* use a for loop to check to see if the folder already exists

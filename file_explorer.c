@@ -175,17 +175,63 @@ int main(){
                 break;
             case 5:
                 printf("enter name of folder you want to copy\n");
-                scanf("%s", initial_file);
-                /* use a for loop to check to see if the folder already exists
-                   if it doesnt then print an error message and break
-                 else continue*/
+                //scanf("%s", initial_file);
+                gets(initial_file);
+                fflush(stdin);
+                entity = readdir(dir);
+                while(entity != NULL) // goes through each item in directory
+                {
+                    printf("%s\n",entity->d_name);
+                    if(entity->d_name == initial_file) //checks to see if the file you wish to copy exists
+                    {
+                        contains = 1; //if it does it makes the flag 1 maening true
+                        break; //dont need to go thorugh the rest of the directory so break out
+                    }
+                    entity = readdir(dir);
+                }
+                if (contains)
+                {
+                    contains = 0; // if exist turn the flag back to 0, then continue 
+                }
+                else
+                {
+                    printf("file or directroy does not exist\n"); //prints error essage cause the file does not exist in the directory
+                    break;
+                }
                 printf("enter name of folder you want to copy to\n");
-                scanf("%s", new_file);
-                /* use a for loop to check to see if the folder already exists
-                   if it does then print an error message and break
-                   else create the folder
-                   then copy contents of file*/
+                //scanf("%s", new_file);
+                gets(new_file);
+                fflush(stdin);
+                entity = readdir(dir);
+                while(entity != NULL) // goes through each item in directory
+                {
+                    printf("%s\n",entity->d_name);
+                    if(entity->d_name == new_file) //checks to see if the file you wish to copy to exists
+                    {
+                        contains = 1; //if it does it makes the flag 1 maening true
+                        break;
+                    }
+                    entity = readdir(dir);
+                }
+                if (contains)
+                {
+                    //do not need to create a new file or folder
+                    contains = 0;
+                    break;
+                }
+                else
+                {
+                    //need to create a new file or folder
+                }
+                // copy contents of the file or directory
                 break;
+            case 6:
+                printf("exiting file explorer\n");
+                return 0;
+            default:
+                printf("Did not enter an acceptable command\n");
+                break;
+        }
             case 6:
                 printf("exiting file explorer\n");
                 return 0;

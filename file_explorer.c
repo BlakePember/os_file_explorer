@@ -34,6 +34,7 @@ int main(){
     printf("Starting in the C drive\n");
     dir = opendir(current);
     int remove;
+    int contains = 0;
     while(1){
         
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");

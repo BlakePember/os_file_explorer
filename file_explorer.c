@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #define BUF 20
 int main(){
     int input;
@@ -29,6 +33,7 @@ int main(){
     current[0] = 'C';
     printf("Starting in the C drive\n");
     dir = opendir(current);
+    int remove;
     while(1){
         
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");
@@ -72,7 +77,20 @@ int main(){
 
             case 3: //deletes file in current directory
                 printf("enter name of folder you want to remove\n");
-                scanf("%s", rm_file);
+                //scanf("%s", rm_file);
+                gets(rm_file);
+                fflush(stdin);
+                remove = rmdir(rm_file);
+                printf("Remove is: %d\n", remove);
+                if (remove == 0)
+                {
+                    printf("Given empty directory removed successfully\n");
+                }    
+                else
+                {
+                    printf("Unable to remove directory %s\n", rm_file);
+                }
+                    
                 /* use a for loop to check to see if the folder already exists
                    if it doesnt then print an error message and break
                    else delete the folder*/

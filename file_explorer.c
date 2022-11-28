@@ -1,32 +1,11 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #define BUF 20
-void listFiles(const char* dirname) {
-    DIR* dir = opendir(dirname);
-    if (dir == NULL) {
-        return;
-    }
-
-    printf("Reading files in: %s\n", dirname);
-
-    struct dirent* entity;
-    entity = readdir(dir);
-    while (entity != NULL) {
-        printf("%hhd %s/%s\n", entity->d_type, dirname, entity->d_name);
-        if (entity->d_type == DT_DIR && strcmp(entity->d_name, ".") != 0 && strcmp(entity->d_name, "..") != 0) {
-            char path[100] = { 0 };
-            strcat(path, dirname);
-            strcat(path, "/");
-            strcat(path, entity->d_name);
-            listFiles(path);
-        }
-        entity = readdir(dir);
-    }
-
-    closedir(dir);
-}
-
 int main(){
     int input;
     int end = 0;
@@ -50,22 +29,21 @@ int main(){
     char rm_file[BUF];
     char new_file[BUF];
     char initial_file[BUF];
-    char prev[100];
+    char prev[BUF];
     current[0] = 'C';
     printf("Starting in the C drive\n");
     dir = opendir(current);
-    int found;
-    int contains = 0;
+    int remove;
     while(1){
         
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");
         scanf("%d",&input);
         fflush (stdin);
         switch(input){
-            case 0: 
+            case 0:  // prints current directory
                 printf("Current directory is %s\n", current);
                 break;
-            case 1:
+            case 1: // prints all files in current directory
                 printf("Displaying contents of folder\n");
                 entity = readdir(dir);
                 while(entity != NULL){
@@ -74,21 +52,13 @@ int main(){
                 }
                 printf("\n");
                 break;
-            case 2:
-                printf(""); //idk why but it needs this
+            case 2: // changes the current directory
+                closedir(dir);
                 char path[100] = { 0 };
+                strcpy(prev, current);
                 printf("enter name of folder\n");
                 gets(go_to);
                 fflush(stdin);
-                printf("%s\n",go_to);
-                if(!strcmp(go_to,"..")){
-                    closedir(dir);
-                    printf("going back\n");
-                    strcpy(current,prev);
-                    dir = opendir(prev);
-                    break;
-                }
-                strcpy(prev, current);
                 strcat(path,current);
                 strcat(path,go_to);
                 strcat(path,"/");
@@ -105,37 +75,34 @@ int main(){
                 }
                 break;
 
-            case 3: 
+            case 3: //deletes file in current directory
                 printf("enter name of folder you want to remove\n");
+                //scanf("%s", rm_file);
                 gets(rm_file);
                 fflush(stdin);
-                found = 0;
-                entity = readdir(dir);
-                while(entity != NULL){
-                    printf("%s\n",entity->d_name);
-                    if(!strcmp(entity->d_name,rm_file)){
-                        found = 1;
-                        printf("removing %s\n",rm_file);
-                    }
-                    entity = readdir(dir);
+                remove = rmdir(rm_file);
+                printf("Remove is: %d\n", remove);
+                if (remove == 0)
+                {
+                    printf("Given empty directory removed successfully\n");
+                }    
+                else
+                {
+                    printf("Unable to remove directory %s\n", rm_file);
                 }
-                if(found == 0){
-                        printf("File not found\n");
-                }
-                closedir(dir);
-                dir = opendir(current);
+                    
                 /* use a for loop to check to see if the folder already exists
                    if it doesnt then print an error message and break
                    else delete the folder*/
                 break;
-            case 4: 
+            case 4: //creates a file in current directory
                 printf("enter name of folder you want to create\n");
                 scanf("%s", new_file);
                 /* use a for loop to check to see if the folder already exists
                    if it does then print an error message and break
                    else create the folder*/
                 break;
-            case 5:
+            case 5: //copies a file in the currrent directory
                 printf("enter name of folder you want to copy\n");
                 //scanf("%s", initial_file);
                 gets(initial_file);

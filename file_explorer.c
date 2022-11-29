@@ -10,9 +10,7 @@
     if (dir == NULL) {
         return;
     }
-
     printf("Reading files in: %s\n", dirname);
-
     struct dirent* entity;
     entity = readdir(dir);
     while (entity != NULL) {
@@ -26,7 +24,6 @@
         }
         entity = readdir(dir);
     }
-
     closedir(dir);
 }*/
 
@@ -65,7 +62,7 @@ int main(){
     char hold[100];
     while(1){
         
-        printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 searchs for a file\n6 to exit\n\n");
+        printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 search for a file\n6 to exit\n\n");
         scanf("%d",&input);
         fflush (stdin);
         switch(input){
@@ -106,12 +103,19 @@ int main(){
                             break;
                         }
                         closedir(dir);
-                        printf("going back\n");
-                        strcpy(current,prev);
                         dir = opendir(prev);
+                        printf("going back\n");
+                        sprintf(current,"%s",prev);
+                        snprintf(hold,strlen(prev)-1,"%s\n",prev);
+                        ptr = strrchr(hold,'/');
+                        if (ptr != NULL){
+                            //strncpy(hold1,hold,strlen(hold)-strlen(ptr)+1);//doesn't work unless I do this garbage
+                            //strcpy(prev,hold1);
+                            snprintf(prev,strlen(hold)-strlen(ptr)+2,"%s",hold);
+                        }
+                        
                         break;
                     }
-                    strcpy(prev, current);
                     strcat(path,current);
                     strcat(path,go_to);
                     strcat(path,"/");
@@ -119,11 +123,11 @@ int main(){
                     if(dir == NULL){
                         closedir(dir);
                         printf("invalid directory, reverting to previous directory\n");
-                        dir = opendir(prev);
-                        strcpy(current,prev);
+                        dir = opendir(current);
                     }
                     else{
                         printf("succesful, moving to %s\n",path);
+                        strcpy(prev,current);
                         strcpy(current,path);
                     }
                 }
@@ -135,8 +139,7 @@ int main(){
                     if(dir == NULL){
                         closedir(dir);
                         printf("invalid directory, reverting to previous directory\n");
-                        dir = opendir(prev);
-                        strcpy(current,prev);
+                        dir = opendir(current);
                     }
                     else{
                         printf("succesful, moving to %s\n",path);
@@ -145,11 +148,12 @@ int main(){
                         strcpy(current,path);     
                         ptr = strrchr(prev,'/');
                         if (ptr == NULL){
-                            strcpy(prev,current);
+                            sprintf(prev,"%s",current);
                         }
                         else{
-                            strncpy(hold,prev,strlen(prev)-strlen(ptr)+1);//doesn't work unless I do this because c is a garbage language
-                            strcpy(prev,hold);
+                            //strncpy(hold,prev,strlen(prev)-strlen(ptr)+1);//doesn't work unless I do this because c is a garbage language
+                            //strcpy(prev,hold);
+                            snprintf(prev,strlen(prev)-strlen(ptr)+2,"%s",prev);
                         }
                     }
                 }
@@ -222,7 +226,25 @@ int main(){
                    if it does then print an error message and break
                    else create the folder*/
                 break;
-            case 5: //searches through a file
+            case 5: //lists all files that contain keyword or share name
+                printf("enter keyword or name\n");
+                gets(rm_file);
+                fflush(stdin);
+                found = 0;
+                entity = readdir(dir);
+                while(entity != NULL){
+                    if(strstr(entity->d_name,rm_file)){
+                        found = 1;
+                        printf("%s\n",entity->d_name);
+                    }
+                    entity = readdir(dir);
+                }
+                if (found == 0){
+                    printf("no hits\n");
+                }
+
+                closedir(dir);
+                dir = opendir(current);
                 break;
             case 6:
                 printf("exiting file explorer\n");

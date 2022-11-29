@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <dirent.h>
+#include <stdio.h>
+#include <dirent.h>
 #include <string.h>
-#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -11,9 +12,7 @@
     if (dir == NULL) {
         return;
     }
-
     printf("Reading files in: %s\n", dirname);
-
     struct dirent* entity;
     entity = readdir(dir);
     while (entity != NULL) {
@@ -27,7 +26,6 @@
         }
         entity = readdir(dir);
     }
-
     closedir(dir);
 }*/
 
@@ -60,6 +58,7 @@ int main(){
     dir = opendir(current);
     int found;
     int contains = 0;
+    int mode;
     while(1){
         
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");
@@ -77,35 +76,65 @@ int main(){
                     entity = readdir(dir);
                 }
                 printf("\n");
+                closedir(dir);
+                dir = opendir(current);
                 break;
             case 2:
                 printf(""); //idk why but it needs this
                 char path[100] = { 0 };
-                printf("enter name of folder\n");
-                gets(go_to);
-                fflush(stdin);
-                printf("%s\n",go_to);
-                if(!strcmp(go_to,"..")){
-                    closedir(dir);
-                    printf("going back\n");
-                    strcpy(current,prev);
-                    dir = opendir(prev);
-                    break;
+                while(1){
+                    printf("Would you like to input a path(0), or a directory");
+                    scanf("%d",mode);
+                    fflush(stdin);
+                    if(mode == 1 || mode == 0){
+                        break;
+                    }
+                    printf("invalid input, try again\n");
                 }
-                strcpy(prev, current);
-                strcat(path,current);
-                strcat(path,go_to);
-                strcat(path,"/");
-                dir = opendir(path);
-                if(dir == NULL){
-                    closedir(dir);
-                    printf("invalid directory, reverting to previous directory\n");
-                    dir = opendir(prev);
-                    strcpy(current,prev);
+                if (mode == 1){
+                    printf("enter name of folder\n");
+                    gets(go_to);
+                    fflush(stdin);
+                    printf("%s\n",go_to);
+                    if(!strcmp(go_to,"..")){
+                        closedir(dir);
+                        printf("going back\n");
+                        strcpy(current,prev);
+                        dir = opendir(prev);
+                        break;
+                    }
+                    strcpy(prev, current);
+                    strcat(path,current);
+                    strcat(path,go_to);
+                    strcat(path,"/");
+                    dir = opendir(path);
+                    if(dir == NULL){
+                        closedir(dir);
+                        printf("invalid directory, reverting to previous directory\n");
+                        dir = opendir(prev);
+                        strcpy(current,prev);
+                    }
+                    else{
+                        printf("succesful, moving to %s\n",path);
+                        strcpy(current,path);
+                    }
                 }
                 else{
-                    printf("succesful, moving to %s\n",path);
-                    strcpy(current,path);
+                    printf("enter path\n");
+                    gets(path);
+                    fflush(stdin);
+                    dir = opendir(path);
+                    if(dir == NULL){
+                        closedir(dir);
+                        printf("invalid directory, reverting to previous directory\n");
+                        dir = opendir(prev);
+                        strcpy(current,prev);
+                    }
+                    else{
+                        printf("succesful, moving to %s\n",path);
+                        strcpy(current,path);
+
+                    }
                 }
                 break;
 

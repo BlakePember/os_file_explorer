@@ -84,16 +84,14 @@ void change_directory(char *current, char *prev, char *go_to)
         else
         {
             printf("succesful, moving to %s\n", go_to);
-            strcpy(prev, go_to);
+            sprintf(prev, "%s", go_to);
             strcat(go_to, "/");
-            strcpy(current, go_to);
-            ptr = strrchr(prev, '/');
-            if (ptr == NULL)
-            {
+            sprintf(current, "%s", go_to);
+            ptr = strrchr(prev, '/');          
+            if (ptr == NULL){
                 sprintf(prev, "%s", current);
             }
-            else
-            {
+            else{
                 snprintf(prev, strlen(prev) - strlen(ptr) + 2, "%s", prev);
             }
         }
@@ -110,7 +108,6 @@ void delete_file(char *current, char *rm_file)
     entity = readdir(dir);
     while (entity != NULL)
     {
-        printf("%s\n", entity->d_name);
         if (!strcmp(entity->d_name, rm_file))
         {
             found = 1;
@@ -128,12 +125,11 @@ void delete_file(char *current, char *rm_file)
             }
             break;
         }
-        if (found == 0)
-        {
-            entity = readdir(dir);
-        }
+        entity = readdir(dir);
     }
-    printf("File not found\n");
+    if(found == 0){
+        printf("File not found\n");
+    }
 }
 
 void create_directory(char *current, char *rm_file)
@@ -149,7 +145,7 @@ void create_directory(char *current, char *rm_file)
         if (!strcmp(entity->d_name, rm_file))
         {
             printf("found %s, folder creation failed\n", rm_file);
-            break;
+            return;
         }
         entity = readdir(dir);
     }
@@ -157,12 +153,10 @@ void create_directory(char *current, char *rm_file)
     strcat(path2, current);
     strcat(path2, rm_file);
     strcat(path2, "/");
-    if (mkdir(path2))
-    {
+    if (!mkdir(path2)){
         printf("Succesful\n");
     }
-    else
-    {
+    else{
         printf("weird stuff happened\n");
     }
 }
@@ -187,26 +181,21 @@ void search(char *current, char *rm_file)
     {
         printf("no hits\n");
     }
+    return;
 }
 
 int main()
 {
     int input;
     char current[200] = {'C', ':', '/'};
-    char go_to[BUF];
+    char go_to[200];
     DIR *dir;
     struct dirent *entity;
     char rm_file[BUF];
-    char new_file[BUF];
-    char initial_file[BUF];
-    char prev[100];
+    char prev[200];
     printf("Starting in the C drive\n");
     dir = opendir(current);
-    strcpy(prev, current);
-    int found;
-    int contains = 0;
-    int mode;
-    char *ptr;
+    sprintf(prev, "%s", current);
     char hold[100];
     while (1)
     {

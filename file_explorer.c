@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <dirent.h>
-#include <stdio.h>
-#include <dirent.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -56,12 +54,15 @@ int main(){
     current[0] = 'C';
     printf("Starting in the C drive\n");
     dir = opendir(current);
+    strcpy(prev,current);
     int found;
     int contains = 0;
     int mode;
+    char* ptr;
+    char hold[100];
     while(1){
         
-        printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");
+        printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 search for a file\n6 to exit\n\n");
         scanf("%d",&input);
         fflush (stdin);
         switch(input){
@@ -83,27 +84,38 @@ int main(){
                 printf(""); //idk why but it needs this
                 char path[100] = { 0 };
                 while(1){
-                    printf("Would you like to input a path(0), or a directory");
-                    scanf("%d",mode);
+                    printf("Would you like to input a path(0), or a directory(1)\n");
+                    scanf("%d",&mode);
                     fflush(stdin);
                     if(mode == 1 || mode == 0){
                         break;
                     }
+
                     printf("invalid input, try again\n");
                 }
                 if (mode == 1){
                     printf("enter name of folder\n");
                     gets(go_to);
                     fflush(stdin);
-                    printf("%s\n",go_to);
                     if(!strcmp(go_to,"..")){
+                        if(!strcmp(current,prev)){
+                            printf("Lowest level directory, doing nothing\n");
+                            break;
+                        }
                         closedir(dir);
-                        printf("going back\n");
-                        strcpy(current,prev);
                         dir = opendir(prev);
+                        printf("going back\n");
+                        sprintf(current,"%s",prev);
+                        snprintf(hold,strlen(prev)-1,"%s\n",prev);
+                        ptr = strrchr(hold,'/');
+                        if (ptr != NULL){
+                            //strncpy(hold1,hold,strlen(hold)-strlen(ptr)+1);//doesn't work unless I do this garbage
+                            //strcpy(prev,hold1);
+                            snprintf(prev,strlen(hold)-strlen(ptr)+2,"%s",hold);
+                        }
+                        
                         break;
                     }
-                    strcpy(prev, current);
                     strcat(path,current);
                     strcat(path,go_to);
                     strcat(path,"/");
@@ -111,11 +123,11 @@ int main(){
                     if(dir == NULL){
                         closedir(dir);
                         printf("invalid directory, reverting to previous directory\n");
-                        dir = opendir(prev);
-                        strcpy(current,prev);
+                        dir = opendir(current);
                     }
                     else{
                         printf("succesful, moving to %s\n",path);
+                        strcpy(prev,current);
                         strcpy(current,path);
                     }
                 }
@@ -127,15 +139,25 @@ int main(){
                     if(dir == NULL){
                         closedir(dir);
                         printf("invalid directory, reverting to previous directory\n");
-                        dir = opendir(prev);
-                        strcpy(current,prev);
+                        dir = opendir(current);
                     }
                     else{
                         printf("succesful, moving to %s\n",path);
-                        strcpy(current,path);
-
+                        strcpy(prev,path);
+                        strcat(path,"/");
+                        strcpy(current,path);     
+                        ptr = strrchr(prev,'/');
+                        if (ptr == NULL){
+                            sprintf(prev,"%s",current);
+                        }
+                        else{
+                            //strncpy(hold,prev,strlen(prev)-strlen(ptr)+1);//doesn't work unless I do this because c is a garbage language
+                            //strcpy(prev,hold);
+                            snprintf(prev,strlen(prev)-strlen(ptr)+2,"%s",prev);
+                        }
                     }
                 }
+
                 break;
 
             case 3: 
@@ -204,7 +226,33 @@ int main(){
                    if it does then print an error message and break
                    else create the folder*/
                 break;
-            case 5:
+            case 5: //lists all files that contain keyword or share name
+                printf("enter keyword or name\n");
+                gets(rm_file);
+                fflush(stdin);
+                found = 0;
+                entity = readdir(dir);
+                while(entity != NULL){
+                    if(strstr(entity->d_name,rm_file)){
+                        found = 1;
+                        printf("%s\n",entity->d_name);
+                    }
+                    entity = readdir(dir);
+                }
+                if (found == 0){
+                    printf("no hits\n");
+                }
+
+                closedir(dir);
+                dir = opendir(current);
+                break;
+            case 6:
+                printf("exiting file explorer\n");
+                return 0;
+            default:
+                printf("Did not enter an acceptable command\n");
+                break;
+            /*case 7: //copies a folder
                 printf("enter name of folder you want to copy\n");
                 //scanf("%s", initial_file);
                 gets(initial_file);
@@ -255,13 +303,7 @@ int main(){
                     //need to create a new file or folder
                 }
                 // copy contents of the file or directory
-                break;
-            case 6:
-                printf("exiting file explorer\n");
-                return 0;
-            default:
-                printf("Did not enter an acceptable command\n");
-                break;
+                break;*/
         }
     }
     //should not get here

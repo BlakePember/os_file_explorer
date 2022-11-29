@@ -57,9 +57,12 @@ int main(){
     current[0] = 'C';
     printf("Starting in the C drive\n");
     dir = opendir(current);
+    strcpy(prev,current);
     int found;
     int contains = 0;
     int mode;
+    char* ptr;
+    char hold[100];
     while(1){
         
         printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");
@@ -84,20 +87,24 @@ int main(){
                 printf(""); //idk why but it needs this
                 char path[100] = { 0 };
                 while(1){
-                    printf("Would you like to input a path(0), or a directory");
-                    scanf("%d",mode);
+                    printf("Would you like to input a path(0), or a directory(1)\n");
+                    scanf("%d",&mode);
                     fflush(stdin);
                     if(mode == 1 || mode == 0){
                         break;
                     }
+
                     printf("invalid input, try again\n");
                 }
                 if (mode == 1){
                     printf("enter name of folder\n");
                     gets(go_to);
                     fflush(stdin);
-                    printf("%s\n",go_to);
                     if(!strcmp(go_to,"..")){
+                        if(!strcmp(current,prev)){
+                            printf("Lowest level directory, doing nothing\n");
+                            break;
+                        }
                         closedir(dir);
                         printf("going back\n");
                         strcpy(current,prev);
@@ -133,10 +140,20 @@ int main(){
                     }
                     else{
                         printf("succesful, moving to %s\n",path);
-                        strcpy(current,path);
-
+                        strcpy(prev,path);
+                        strcat(path,"/");
+                        strcpy(current,path);     
+                        ptr = strrchr(prev,'/');
+                        if (ptr == NULL){
+                            strcpy(prev,current);
+                        }
+                        else{
+                            strncpy(hold,prev,strlen(prev)-strlen(ptr)+1);//doesn't work unless I do this because c is a garbage language
+                            strcpy(prev,hold);
+                        }
                     }
                 }
+
                 break;
 
             case 3: 

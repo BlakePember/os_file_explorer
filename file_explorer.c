@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #define BUF 20
-void listFiles(const char* dirname) {
+/*void listFiles(const char* dirname) {
     DIR* dir = opendir(dirname);
     if (dir == NULL) {
         return;
@@ -29,7 +29,7 @@ void listFiles(const char* dirname) {
     }
 
     closedir(dir);
-}
+}*/
 
 int main(){
     int input;

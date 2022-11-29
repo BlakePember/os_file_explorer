@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #define BUF 20
-/*void listFiles(const char* dirname) {
+void listFiles(const char* dirname) {
     DIR* dir = opendir(dirname);
     if (dir == NULL) {
         return;
@@ -28,7 +29,7 @@
     }
 
     closedir(dir);
-}*/
+}
 
 int main(){
     int input;

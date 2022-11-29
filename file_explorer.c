@@ -65,7 +65,7 @@ int main(){
     char hold[100];
     while(1){
         
-        printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 cp a file\n6 to exit\n\n");
+        printf("Input a command\n0 for current directory\n1 for ls\n2 for cd\n3 to delete file\n4 to create a folder\n5 searchs for a file\n6 to exit\n\n");
         scanf("%d",&input);
         fflush (stdin);
         switch(input){
@@ -222,7 +222,15 @@ int main(){
                    if it does then print an error message and break
                    else create the folder*/
                 break;
-            case 5:
+            case 5: //searches through a file
+                break;
+            case 6:
+                printf("exiting file explorer\n");
+                return 0;
+            default:
+                printf("Did not enter an acceptable command\n");
+                break;
+            /*case 7: //copies a folder
                 printf("enter name of folder you want to copy\n");
                 //scanf("%s", initial_file);
                 gets(initial_file);
@@ -273,13 +281,7 @@ int main(){
                     //need to create a new file or folder
                 }
                 // copy contents of the file or directory
-                break;
-            case 6:
-                printf("exiting file explorer\n");
-                return 0;
-            default:
-                printf("Did not enter an acceptable command\n");
-                break;
+                break;*/
         }
     }
     //should not get here

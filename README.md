@@ -1,5 +1,5 @@
-Wilson Guo
-Blake Pember
+Wilson Guo,
+Blake Pember,
 Peinan Zhou
 
 This file explorer will use c code and will run as a .txt file using dirent.h which supposedly comes standard for windows these days. We could also potentially achieve the same result using the c++ process api. 
